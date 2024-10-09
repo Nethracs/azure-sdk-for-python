@@ -22,6 +22,11 @@ class IsolationMode:
     ALLOW_INTERNET_OUTBOUND = "AllowInternetOutbound"
     ALLOW_ONLY_APPROVED_OUTBOUND = "AllowOnlyApprovedOutbound"
 
+class FirewallSku:
+    """FirewallSku for FQDN rules in AllowOnlyApprovedOutbound mode."""
+
+    STANDARD = "Standard"
+    BASIC = "Basic"
 
 class OutboundRuleCategory:
     """Category for a managed network outbound rule."""

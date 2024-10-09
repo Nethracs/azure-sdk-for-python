@@ -5,7 +5,7 @@
 from abc import ABC
 from typing import Any, Dict, List, Optional
 
-from azure.ai.ml._restclient.v2024_07_01_preview.models import (
+from azure.ai.ml._restclient.v2024_10_01_preview.models import (
     FqdnOutboundRule as RestFqdnOutboundRule,
     ManagedNetworkProvisionStatus as RestManagedNetworkProvisionStatus,
     ManagedNetworkSettings as RestManagedNetwork,
@@ -257,6 +257,8 @@ class ManagedNetwork:
     :type outbound_rules: List[~azure.ai.ml.entities.OutboundRule]
     :param network_id: Network id for the managed network, not meant to be set by user.
     :type network_id: str
+    :param firewall_sku: FirewallSku for FQDN rules in AllowOnlyApprovedOutbound mode, defaults to Standard.
+    :type firewall_sku: str
 
     .. literalinclude:: ../samples/ml_samples_workspace.py
             :start-after: [START workspace_managed_network]
@@ -272,11 +274,13 @@ class ManagedNetwork:
         isolation_mode: str = IsolationMode.DISABLED,
         outbound_rules: Optional[List[OutboundRule]] = None,
         network_id: Optional[str] = None,
+        firewall_sku: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
         self.isolation_mode = isolation_mode
         self.network_id = network_id
         self.outbound_rules = outbound_rules
+        self.firewall_sku = firewall_sku
         self.status = kwargs.pop("status", None)
 
     def _to_rest_object(self) -> RestManagedNetwork:
@@ -289,7 +293,7 @@ class ManagedNetwork:
             if self.outbound_rules
             else {}
         )
-        return RestManagedNetwork(isolation_mode=self.isolation_mode, outbound_rules=rest_outbound_rules)
+        return RestManagedNetwork(isolation_mode=self.isolation_mode, outbound_rules=rest_outbound_rules, firewall_sku=self.firewall_sku)
 
     @classmethod
     def _from_rest_object(cls, obj: RestManagedNetwork) -> "ManagedNetwork":
@@ -305,6 +309,7 @@ class ManagedNetwork:
             isolation_mode=obj.isolation_mode,
             outbound_rules=from_rest_outbound_rules,  # type: ignore[arg-type]
             network_id=obj.network_id,
+            firewall_sku=obj.firewall_sku,
             status=obj.status,
         )
 

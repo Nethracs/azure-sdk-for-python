@@ -14,7 +14,7 @@ from azure.ai.ml.entities._workspace.networking import (
     ServiceTagDestination,
     PrivateEndpointDestination,
 )
-from azure.ai.ml.constants._workspace import IsolationMode, OutboundRuleCategory
+from azure.ai.ml.constants._workspace import IsolationMode, OutboundRuleCategory, FirewallSku
 from azure.ai.ml._utils.utils import camel_to_snake, _snake_to_camel
 
 
@@ -186,6 +186,14 @@ class ManagedNetworkSchema(metaclass=PatchedSchemaMeta):
     )
     network_id = fields.Str(required=False, dump_only=True)
     status = NestedField(ManagedNetworkStatusSchema, allow_none=False, unknown=EXCLUDE)
+    firewall_sku = StringTransformedEnum(
+        allowed_values=[
+            FirewallSku.STANDARD,
+            FirewallSku.BASIC,
+        ],
+        casing_transform=camel_to_snake,
+        metadata={"description": "firewallsku for FQDN rules in AllowOnlyApprovedOutbound the workspace managed network."},
+    )
 
     @post_load
     def make(self, data, **kwargs):
