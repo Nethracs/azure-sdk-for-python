@@ -710,7 +710,7 @@ class MLClient:
 
         self._featurestores = FeatureStoreOperations(
             self._operation_scope,
-            self._service_client_07_2024_preview,
+            self._service_client_10_2024_preview,
             self._operation_container,
             self._credential,
             **app_insights_handler_kwargs,  # type: ignore[arg-type]
